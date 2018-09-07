@@ -13,7 +13,7 @@ This script makes the following assumptions about the CSV input it recieves:
 
 * It is formatted horizontally, with the data for one YML file per row.
 * The first row is a row of headers used to populate the YML file.
-* There is a column called `id`, which contains unique values to be used as the filename for the YML file.
+* There is a column called `id` (case insensitive), which contains unique values to be used as the filename for the YML file.
 
 ### Usage
 

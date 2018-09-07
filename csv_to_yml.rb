@@ -11,7 +11,6 @@ def validate_args!
 end
 
 def create_yml_file(args = {}, file_ext, dest_dir)
-  raise Exception.new('Column named \"id"\ is required for intended todo filename') if args[:id].nil?
   headers = args.keys
   todo_name = args[:id].to_s
   todo_path = File.join dest_dir, "#{todo_name}.#{file_ext.to_s}"
@@ -30,7 +29,11 @@ logger = Logger.new(STDOUT)
 logger.level = Logger::INFO
 logger.info('Make TODOs started')
 
-SmarterCSV.process(file).each do |row|
+csv_processed = SmarterCSV.process(file)
+
+csv_processed.each do |row|
+  raise Exception.new('Column named "id" is required for intended todo filename') if row[:id].nil?
+  raise Exception.new('Duplicate values in id column; id values must be unique') if csv_processed.uniq { |e| e[:id] }.length != csv_processed.length
   todo_filename = create_yml_file(row, file_ext, dest_dir)
   logger.info("TODO file #{todo_filename} created.")
 end
