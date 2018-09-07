@@ -3,6 +3,7 @@
 require 'logger'
 require 'smarter_csv'
 require 'yaml'
+require 'zaru'
 
 def validate_args!
   raise ArgumentError.new('Please supply a CSV file') if ARGV[0].nil?
@@ -12,7 +13,7 @@ end
 
 def create_yml_file(args = {}, file_ext, dest_dir)
   headers = args.keys
-  todo_name = args[:id].to_s
+  todo_name = Zaru.sanitize!(args[:id].to_s)
   todo_path = File.join dest_dir, "#{todo_name}.#{file_ext.to_s}"
   data = headers.inject({}) { |h,header| h.merge(header => args[header]) }
   File.open(todo_path, 'w+') { |f| f.puts YAML::dump data }
@@ -35,7 +36,7 @@ csv_processed.each do |row|
   raise Exception.new('Column named "id" is required for intended todo filename') if row[:id].nil?
   raise Exception.new('Duplicate values in id column; id values must be unique') if csv_processed.uniq { |e| e[:id] }.length != csv_processed.length
   todo_filename = create_yml_file(row, file_ext, dest_dir)
-  logger.info("TODO file #{todo_filename} created.")
+  logger.info("YML file #{todo_filename} created.")
 end
 
 logger.info("Make TODOs complete.  Files available at #{dest_dir}.")
