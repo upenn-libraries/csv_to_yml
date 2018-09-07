@@ -28,7 +28,7 @@ dest_dir = ARGV[2]
 
 logger = Logger.new(STDOUT)
 logger.level = Logger::INFO
-logger.info('Make TODOs started')
+logger.info('Make YMLs started')
 
 csv_processed = SmarterCSV.process(file)
 
@@ -39,4 +39,4 @@ csv_processed.each do |row|
   logger.info("YML file #{todo_filename} created.")
 end
 
-logger.info("Make TODOs complete.  Files available at #{dest_dir}.")
+logger.info("Make YMLs complete.  Files available at #{dest_dir}.")
